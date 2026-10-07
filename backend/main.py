@@ -22,6 +22,13 @@ class PracticeCreate(PracticeBase):
     pass
 
 
+class PracticeUpdate(SQLModel):
+    date: datetime.date | None = None
+    total_yards: int | None = None
+    duration_min: int | None = None
+    feel: int | None = None
+    notes: str | None = None
+
 # ---------- Database ----------
 engine = create_engine("sqlite:///swim.db", connect_args={"check_same_thread": False})
 SQLModel.metadata.create_all(engine)
@@ -71,3 +78,18 @@ def delete_practice(practice_id: int, session: SessionDep):
     session.delete(practice)
     session.commit()
     return {"message": "Practice deleted"}
+
+@app.patch("/practices/{practice_id}")
+def update_practice(practice_id: int, practice_update: PracticeUpdate, session: SessionDep):
+    practice = session.get(Practice, practice_id)
+    if not practice:
+        raise HTTPException(status_code=404, detail="Practice not found")
+    
+    update_data = practice_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(practice, key, value)
+    
+    session.add(practice)
+    session.commit()
+    session.refresh(practice)
+    return practice
