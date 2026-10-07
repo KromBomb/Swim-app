@@ -1,7 +1,7 @@
 import datetime
 from typing import Annotated
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 
@@ -55,3 +55,19 @@ def create_practice(practice: PracticeCreate, session: SessionDep):
 @app.get("/practices")
 def get_practices(session: SessionDep):
     return session.exec(select(Practice)).all()
+
+@app.get("/practices/{practice_id}")
+def get_practice(practice_id: int, session: SessionDep):
+    practice = session.get(Practice, practice_id)
+    if not practice:
+        raise HTTPException(status_code=404, detail="Practice not found")
+    return practice
+
+@app.delete("/practices/{practice_id}")
+def delete_practice(practice_id: int, session: SessionDep):
+    practice = session.get(Practice, practice_id)
+    if not practice:
+        raise HTTPException(status_code=404, detail="Practice not found")
+    session.delete(practice)
+    session.commit()
+    return {"message": "Practice deleted"}
