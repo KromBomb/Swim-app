@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PracticeForm from "./PracticeForm";
 
 function App() {
   const [practices, setPractices] = useState([]);
@@ -13,6 +14,7 @@ function App() {
   return (
     <div>
       <h1>My Practices</h1>
+      <PracticeForm onAdd={(newPractice) => setPractices([...practices, newPractice])} />
       {practices.map((practice) => (
         <div key={practice.id}>
           <p>Date: {practice.date}</p>
