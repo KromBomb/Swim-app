@@ -4,6 +4,8 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # ---------- Models ----------
 class PracticeBase(SQLModel):
@@ -44,7 +46,12 @@ SessionDep = Annotated[Session, Depends(get_session)]
 
 # ---------- App ----------
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], 
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 def health():
