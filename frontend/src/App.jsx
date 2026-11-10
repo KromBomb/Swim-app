@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PracticeForm from "./PracticeForm";
+import PracticeCard from "./PracticeCard";
 
 function App() {
   const [practices, setPractices] = useState([]);
@@ -13,6 +14,10 @@ function App() {
 
   function handleAdd(newPractice) {
     setPractices((prev) => [...prev, newPractice]);
+  }
+
+  function handleUpdate(updated) {
+    setPractices((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   }
 
   function handleDelete(id) {
@@ -29,14 +34,12 @@ function App() {
       <h1>My Practices</h1>
       <PracticeForm onAdd={handleAdd} />
       {practices.map((practice) => (
-        <div key={practice.id}>
-          <p>Date: {practice.date}</p>
-          <p>Total Yards: {practice.total_yards}</p>
-          <p>Duration (min): {practice.duration_min}</p>
-          <p>Feel: {practice.feel}</p>
-          <p>Notes: {practice.notes}</p>
-          <button onClick={() => handleDelete(practice.id)}>Delete</button>
-        </div>
+        <PracticeCard
+          key={practice.id}
+          practice={practice}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+        />
       ))}
     </div>
   );
