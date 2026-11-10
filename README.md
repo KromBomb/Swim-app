@@ -6,7 +6,7 @@ A full-stack web app for swimmers to log their practices and generate new workou
 
 - ✅ REST API to create, view, update, and delete practices
 - ✅ SQLite database with SQLModel
-- 🚧 React frontend to view and log practices
+- ✅ React frontend to view and log practices
 - 🚧 Practice sets (reps, distance, stroke, interval)
 - 🚧 Practice generator (pick yardage + focus, get a full workout)
 - 🚧 User accounts and login
